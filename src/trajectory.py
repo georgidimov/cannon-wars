@@ -1,3 +1,4 @@
+import numpy
 import math
 
 
@@ -12,16 +13,18 @@ class Trajectory:
     def __to_radians(self, angle):
         return math.pi / 180. * angle
 
-    def get_next_position(self):
-        position = self.position
-        velocity = [self.initial_speed * math.cos(self.angle),
-                    self.initial_speed * math.sin(self.angle)]
+    def get_coordinates(self):
+        num_steps = 60
+        position = numpy.zeros([num_steps + 1, 2])
+        velocity = numpy.zeros([num_steps + 1, 2])
 
-        while True:
-            position[0] = position[0] + self.h * velocity[0]
-            position[1] = position[1] + self.h * velocity[1]
+        position[0] = self.position
+        velocity[0] = [self.initial_speed * math.cos(self.angle),
+                       self.initial_speed * math.sin(self.angle)]
+        acceleration = numpy.array([0.0, -self.G])
 
-            velocity[0] = velocity[0] + self.h * 0
-            velocity[1] = velocity[1] + self.h * self.G * -1
+        for step in range(num_steps):
+            position[step + 1] = position[step] + self.h * velocity[step]
+            velocity[step + 1] = velocity[step] + self.h * acceleration
 
-            yield position
+        return position
