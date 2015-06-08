@@ -6,4 +6,4 @@ class Projectile:
         self.coordinates = Trajectory(position, angle, initial_speed)
 
     def get_coordinates(self):
-        return next(self.coordinates.get_next_position())
+        return self.coordinates.get_coordinates()
