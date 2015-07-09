@@ -4,8 +4,8 @@ from src.projectile import Projectile
 class Cannon:
     def __init__(self, position, angle, initial_speed):
         self.position = position
-        self.height = 100
-        self.width = 100
+        self.height = 92
+        self.width = 150
 
         self.angle = angle
         self.initial_speed = initial_speed
