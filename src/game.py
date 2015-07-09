@@ -8,22 +8,27 @@ class Game(QtGui.QWidget):
 
         self.windowW = 1000
         self.windowH = 768
-        self.initWindow()
+        self.__init_window()
 
         self.maps = [{}]
+        self.current_map
+        self.__init_maps()
+
+        self.field = Field(self.maps[self.current_map]['location'])
+
+    def __init_window(self):
+        self.resize(self.windowW, self.windowH)
+        self.show()
+
+    def __init_maps(self):
         self.maps[0] = {
             'location': 'maps/map1',
             'texture': 'images/grass1.jpg'
         }
 
         self.current_map = 0
-        self.field = Field(self.maps[self.current_map]['location'])
 
-    def initWindow(self):
-        self.resize(self.windowW, self.windowH)
-        self.show()
-
-    def to_qpoints(self, points):
+    def __to_qpoints(self, points):
         converted_points = []
 
         for point in points:
@@ -36,7 +41,7 @@ class Game(QtGui.QWidget):
         return converted_points
 
     def paintEvent(self, e):
-        field_coordinates = self.to_qpoints(self.field.get_coordinates())
+        field_coordinates = self.__to_qpoints(self.field.get_coordinates())
         field_polygon = QtGui.QPolygonF(field_coordinates)
 
         field_path = QtGui.QPainterPath()
@@ -50,5 +55,3 @@ class Game(QtGui.QWidget):
         field_brush = QtGui.QBrush(field_texture)
         qp.fillPath(field_path, field_brush)
         qp.end()
-
-
