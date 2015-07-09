@@ -14,7 +14,7 @@ class Trajectory:
         return math.pi / 180. * angle
 
     def get_coordinates(self):
-        num_steps = 60
+        num_steps = 100
         position = numpy.zeros([num_steps + 1, 2])
         velocity = numpy.zeros([num_steps + 1, 2])
 
