@@ -1,5 +1,8 @@
 from PyQt4 import QtGui, QtCore
 from src.field import Field
+from src.fieldUI import FieldUI
+from src.cannon import Cannon
+from src.position import Position
 
 
 class Game(QtGui.QWidget):
@@ -11,10 +14,13 @@ class Game(QtGui.QWidget):
         self.__init_window()
 
         self.maps = [{}]
-        self.current_map
+        self.current_map = 0
         self.__init_maps()
 
-        self.field = Field(self.maps[self.current_map]['location'])
+        self.fieldUI = FieldUI(Field(self.maps[self.current_map]['location']),
+                               self.maps[self.current_map]['texture'])
+
+        self.cannons = []
 
     def __init_window(self):
         self.resize(self.windowW, self.windowH)
@@ -28,6 +34,10 @@ class Game(QtGui.QWidget):
 
         self.current_map = 0
 
+    def __init_cannons(self):
+        self.cannons[0] = Cannon(Position(50, 50), 45, 30)
+        self.cannons[1] = Cannon(Position(950, 50), 45, 30)
+
     def __to_qpoints(self, points):
         converted_points = []
 
@@ -40,18 +50,8 @@ class Game(QtGui.QWidget):
 
         return converted_points
 
-    def paintEvent(self, e):
-        field_coordinates = self.__to_qpoints(self.field.get_coordinates())
-        field_polygon = QtGui.QPolygonF(field_coordinates)
-
-        field_path = QtGui.QPainterPath()
-        field_path.addPolygon(field_polygon)
-
-        qp = QtGui.QPainter()
-        qp.begin(self)
-        qp.drawPath(field_path)
-
-        field_texture = QtGui.QPixmap(self.maps[self.current_map]['texture'])
-        field_brush = QtGui.QBrush(field_texture)
-        qp.fillPath(field_path, field_brush)
-        qp.end()
+    def paintEvent(self, event):
+        painter = QtGui.QPainter()
+        painter.begin(self)
+        self.fieldUI.draw(painter)
+        painter.end()
