@@ -1,6 +1,6 @@
 class Position:
-    def __init__(self):
-        self.coordinates = []
+    def __init__(self, x=0, y=0):
+        self.coordinates = [x, y]
 
     def get_horizontal_position(self):
         return self.coordinates[0]
@@ -27,6 +27,7 @@ class Position:
         return serialized_string
 
     def deserialize(self, string):
+        del self.coordinates[:]
         string = string.replace('(', '').replace(')', '').replace('\n', '')
 
         for number in string.split(','):
