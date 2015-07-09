@@ -31,3 +31,6 @@ class Position:
 
         for number in string.split(','):
             self.coordinates.append(int(number))
+
+    def to_tuple(self):
+        return (self.get_horizontal_position(), self.get_vertical_position())
