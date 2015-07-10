@@ -3,6 +3,7 @@ from src.projectile import Projectile
 
 class Cannon:
     def __init__(self, position, angle, initial_speed, projectile_position):
+        self.destroyed = False
         self.position = position
         self.height = 92
         self.width = 150
@@ -11,6 +12,12 @@ class Cannon:
         self.initial_speed = initial_speed
 
         self.projectile = projectile_position
+
+    def destroy(self):
+        self.destroyed = True
+
+    def is_destroyed(self):
+        return self.destroyed
 
     def get_projectile_trajectory(self):
         projectile = Projectile(self.projectile, self.angle, self.initial_speed)

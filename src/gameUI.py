@@ -97,6 +97,10 @@ class GameUI(QtGui.QWidget):
             self.projectiles[index].draw(painter, projectile_image, trajectory)
 
     def paintEvent(self, event):
+        if self.game.game_over:
+            print("Winner is {}".format(self.game.winner()))
+            self.close()
+
         painter = QtGui.QPainter()
         painter.begin(self)
 
@@ -117,9 +121,9 @@ class GameUI(QtGui.QWidget):
         elif event_key == QtCore.Qt.Key_Right:
             self.game.increase_cannon_initial_speed()
         elif event_key == QtCore.Qt.Key_Up:
-            self.game.increase_cannon_initial_speed()
+            self.game.increase_cannon_angle()
         elif event_key == QtCore.Qt.Key_Down:
-            self.game.decrease_cannon_initial_speed()
+            self.game.decrease_cannon_angle()
         elif event_key == QtCore.Qt.Key_Escape:
             self.close()
 

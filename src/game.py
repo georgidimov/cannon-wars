@@ -7,6 +7,7 @@ class Game:
     def __init__(self):
         super(Game, self).__init__()
 
+        self.game_over = False
         self.window_width = 1000
         self.window_height = 768
         self.title = 'Cannon wars'
@@ -44,6 +45,9 @@ class Game:
 
         cannon = Cannon(Position(600, 395), 65, 80, Position(680, 310))
         self.cannons.append(cannon)
+
+    def game_over(self):
+        return self.game_over
 
     def get_window_height(self):
         return self.window_height
@@ -124,6 +128,29 @@ class Game:
     def get_projectile_image(self, index):
         return self.maps[self.current_map]['projectile' + str(index)]
 
+    def __is_cannon_hit(self, index):
+        target = self.cannons[(index + 1) % self.cannons_count]
+        target_x_start = target.get_horizontal_position()
+        target_x_end = target_x_start + target.get_width()
+        target_y_start = target.get_vertical_position()
+        target_y_end = target_y_start + target.get_height()
+        trajectory = self.get_projectile_trajectory()
+
+        for point in trajectory:
+            if point[0] >= target_x_start and point[0] <= target_x_end:
+                if point[1] >= target_y_start and point[1] <= target_y_end:
+                    return True
+        return False
+
     def shoot(self):
+        if self.__is_cannon_hit(self.cannon_turn):
+            self.cannons[self.cannon_turn].destroy()
+            self.game_over = True
+
         self.cannon_turn += 1
         self.cannon_turn %= self.cannons_count
+
+    def winner(self):
+        for cannon in enumerate(self.cannons):
+            if not cannon[1].is_destroyed():
+                return cannon[0]
