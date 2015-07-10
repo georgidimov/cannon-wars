@@ -1,9 +1,8 @@
 from src.projectile import Projectile
-from src.position import Position
 
 
 class Cannon:
-    def __init__(self, position, angle, initial_speed):
+    def __init__(self, position, angle, initial_speed, projectile_position):
         self.position = position
         self.height = 92
         self.width = 150
@@ -11,11 +10,10 @@ class Cannon:
         self.angle = angle
         self.initial_speed = initial_speed
 
+        self.projectile = projectile_position
+
     def get_projectile_trajectory(self):
-        x = self.position.get_horizontal_position() + self.width + 50
-        y = self.position.get_vertical_position() - 1.6 * self.height
-        center = Position(x, y)
-        projectile = Projectile(center, self.angle, self.initial_speed)
+        projectile = Projectile(self.projectile, self.angle, self.initial_speed)
         return projectile.get_coordinates()
 
     def set_horizontal_position(self, x):
