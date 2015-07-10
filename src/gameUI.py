@@ -97,7 +97,7 @@ class GameUI(QtGui.QWidget):
             self.projectiles[index].draw(painter, projectile_image, trajectory)
 
     def paintEvent(self, event):
-        if self.game.game_over:
+        if self.game.is_game_over():
             print("Winner is {}".format(self.game.winner()))
             self.close()
 

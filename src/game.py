@@ -46,7 +46,7 @@ class Game:
         cannon = Cannon(Position(600, 395), 65, 80, Position(680, 310))
         self.cannons.append(cannon)
 
-    def game_over(self):
+    def is_game_over(self):
         return self.game_over
 
     def get_window_height(self):
