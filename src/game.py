@@ -119,6 +119,9 @@ class Game:
 
         return angle
 
+    def get_cannon_initial_speed(self, index):
+        return self.cannons[index].get_initial_speed()
+
     def get_projectile_trajectory(self):
         return self.cannons[self.cannon_turn].get_projectile_trajectory()
 
