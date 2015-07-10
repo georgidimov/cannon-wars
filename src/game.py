@@ -28,13 +28,14 @@ class Game:
             'background': 'images/background_0.png',
             'cannon0': 'images/cannon0_0.png',
             'cannon1': 'images/cannon0_1.png',
-            'projectile': 'images/projectile0.png'
+            'projectile0': 'images/projectile0.png',
+            'projectile1': 'images/projectile0.png'
         }
 
         self.current_map = 0
 
     def __init_cannons(self):
-        self.cannons.append(Cannon(Position(0, 400), 25, 30))
+        self.cannons.append(Cannon(Position(0, 400), 65, 80))
         self.cannons.append(Cannon(Position(600, 395), 28, 30))
 
     def get_window_height(self):
@@ -77,4 +78,15 @@ class Game:
         return self.cannons[index].get_vertical_position()
 
     def get_cannon_angle(self, index):
-        return self.cannons[index].get_angle()
+        angle = self.cannons[index].get_angle()
+
+        if index == 0:
+            angle = 90 - angle
+
+        return angle
+
+    def get_projectile_trajectory(self, index):
+        return self.cannons[index].get_projectile_trajectory()
+
+    def get_projectile_image(self, index):
+        return self.maps[self.current_map]['projectile' + str(index)]
