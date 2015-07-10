@@ -2,6 +2,7 @@ from PyQt4 import QtGui, QtCore
 from src.game import Game
 from src.fieldUI import FieldUI
 from src.cannonUI import CannonUI
+from src.projectileUI import ProjectileUI
 
 
 class GameUI(QtGui.QWidget):
@@ -22,6 +23,9 @@ class GameUI(QtGui.QWidget):
         self.cannons = []
         self.__init_cannons()
 
+        self.projectiles = []
+        self.__init_projectiles()
+
     def __init_window(self):
         self.resize(self.game.get_window_width(), self.game.get_window_height())
         self.setWindowTitle(self.game.get_title())
@@ -31,6 +35,10 @@ class GameUI(QtGui.QWidget):
     def __init_cannons(self):
         for i in range(self.game.get_cannons_count()):
             self.cannons.append(CannonUI())
+
+    def __init_projectiles(self):
+        for i in range(self.game.get_cannons_count()):
+            self.projectiles.append(ProjectileUI())
 
     def __convert_to_qpoints(self, coordinates):
         converted_points = []
@@ -44,35 +52,49 @@ class GameUI(QtGui.QWidget):
 
         return converted_points
 
-    def convert_angle(self, angle):
+    def __convert_trajectory(self, trajectory):
+        for point in trajectory:
+            point[1] = self.game.get_window_height() - point[1]
+
+        return trajectory
+
+    def __convert_angle(self, angle):
         difference_in_image = 25
         return angle - difference_in_image
 
-    def paintEvent(self, event):
-        painter = QtGui.QPainter()
-        painter.begin(self)
-
+    def __draw_field(self, painter):
         field_texture = self.game.get_field_texture()
         field_coordinates = self.game.get_field_coordinates()
         field_coordinates = self.__convert_to_qpoints(field_coordinates)
         self.field.draw(painter, field_texture, field_coordinates)
 
+    def __draw_cannons(self, painter):
         for cannon in enumerate(self.cannons):
-            cannon_index = cannon[0]
-            image = self.game.get_cannon_texture(cannon_index)
-            x = self.game.get_cannon_horizontal_position(cannon_index)
-            y = self.game.get_cannon_vertical_position(cannon_index)
-            width = self.game.get_cannon_width(cannon_index)
-            height = self.game.get_cannon_height(cannon_index)
-            angle = self.game.get_cannon_angle(cannon_index)
-            angle = self.convert_angle(angle)
-            cannon[1].draw(painter, image, x, y, width, height, angle)
+            index = cannon[0]
+            cannon_image = self.game.get_cannon_texture(index)
+            x = self.game.get_cannon_horizontal_position(index)
+            y = self.game.get_cannon_vertical_position(index)
+            width = self.game.get_cannon_width(index)
+            height = self.game.get_cannon_height(index)
+            angle = self.game.get_cannon_angle(index)
+            angle = self.__convert_angle(angle)
+            cannon[1].draw(painter, cannon_image, x, y, width, height, angle)
+
+            projectile_image = self.game.get_projectile_image(index)
+            trajectory = self.game.get_projectile_trajectory(index)
+            trajectory = self.__convert_trajectory(trajectory)
+            self.projectiles[index].draw(painter, projectile_image, trajectory)
+
+    def paintEvent(self, event):
+        painter = QtGui.QPainter()
+        painter.begin(self)
+
+        self.__draw_field(painter)
+        self.__draw_cannons(painter)
+
         painter.end()
 
-        print(event)
-    '''
     def keyPressEvent(self, event):
         if event.key() == QtCore.Qt.Key_Space:
-            self.cannonsUI[0].draw
-
-    '''
+            self.projectiles[0].shoot()
+        self.update()
