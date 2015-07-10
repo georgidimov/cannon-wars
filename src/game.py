@@ -91,9 +91,6 @@ class Game:
     def get_cannon_vertical_position(self, index):
         return self.cannons[index].get_vertical_position()
 
-    def set_cannon_angle(self, index, angle):
-        self.cannons[index].set_angle(angle)
-
     def increase_cannon_angle(self):
         cannon = self.cannons[self.cannon_turn]
         angle = cannon.get_angle()
