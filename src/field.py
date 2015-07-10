@@ -14,8 +14,9 @@ class Field:
         converted_coordinates = []
 
         for coordinate in self.coordinates:
-            converted_coordinates.append(coordinate.get_horizontal_position())
-            converted_coordinates.append(coordinate.get_vertical_position())
+            x = coordinate.get_horizontal_position()
+            y = coordinate.get_vertical_position()
+            converted_coordinates.append((x, y))
 
         return converted_coordinates
 
