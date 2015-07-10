@@ -14,11 +14,11 @@ class Trajectory:
         return math.pi / 180. * angle
 
     def get_coordinates(self):
-        num_steps = 100
+        num_steps = 200
         position = numpy.zeros([num_steps + 1, 2])
         velocity = numpy.zeros([num_steps + 1, 2])
 
-        position[0] = self.position
+        position[0] = self.position.get_horizontal_position()
         velocity[0] = [self.initial_speed * math.cos(self.angle),
                        self.initial_speed * math.sin(self.angle)]
         acceleration = numpy.array([0.0, -self.G])
@@ -26,5 +26,8 @@ class Trajectory:
         for step in range(num_steps):
             position[step + 1] = position[step] + self.h * velocity[step]
             velocity[step + 1] = velocity[step] + self.h * acceleration
+
+        for point in position:
+            point[1] += self.position.get_vertical_position()
 
         return position
