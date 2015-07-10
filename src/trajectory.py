@@ -18,7 +18,8 @@ class Trajectory:
         position = numpy.zeros([num_steps + 1, 2])
         velocity = numpy.zeros([num_steps + 1, 2])
 
-        position[0] = self.position.get_horizontal_position()
+        position[0] = 0
+
         velocity[0] = [self.initial_speed * math.cos(self.angle),
                        self.initial_speed * math.sin(self.angle)]
         acceleration = numpy.array([0.0, -self.G])
@@ -28,6 +29,6 @@ class Trajectory:
             velocity[step + 1] = velocity[step] + self.h * acceleration
 
         for point in position:
+            point[0] += self.position.get_horizontal_position()
             point[1] += self.position.get_vertical_position()
-
         return position
