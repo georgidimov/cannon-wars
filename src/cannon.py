@@ -10,7 +10,7 @@ class Cannon:
         self.angle = angle
         self.initial_speed = initial_speed
 
-    def fire(self):
+    def get_projectile_trajectory(self):
         projectile = Projectile(self.position, self.angle, self.initial_speed)
         return projectile.get_coordinates()
 

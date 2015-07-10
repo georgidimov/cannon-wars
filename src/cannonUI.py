@@ -2,19 +2,20 @@ from PyQt4 import QtGui, QtCore
 
 
 class CannonUI:
-    def __init__(self, cannon, image_location):
-        self.cannon = cannon
-        self.image_location = image_location
-
-    def draw(self, painter):
+    def draw(self, painter, texture, x, y, width, height, angle):
         cannon_rectangle = QtCore.QRect()
-        cannon_rectangle.setWidth(self.cannon.get_width())
-        cannon_rectangle.setHeight(self.cannon.get_height())
+        cannon_rectangle.setWidth(width)
+        cannon_rectangle.setHeight(height)
 
-        bottom_left_point = QtCore.QPoint()
-        bottom_left_point.setX(self.cannon.get_horizontal_position())
-        bottom_left_point.setY(self.cannon.get_vertical_position())
-        cannon_rectangle.moveBottomLeft(bottom_left_point)
+        center = QtCore.QPoint()
+        center.setX(x + width / 2)
+        center.setY(y - height)
 
-        cannon_image = QtGui.QImage(self.image_location)
+        painter.save()
+        painter.translate(center)
+        painter.rotate(angle)
+
+        cannon_image = QtGui.QImage(texture)
+
         painter.drawImage(cannon_rectangle, cannon_image)
+        painter.restore()

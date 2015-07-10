@@ -1,8 +1,8 @@
 import sys
 from PyQt4 import QtGui
-from src.game import Game
+from src.gameUI import GameUI
 
 app = QtGui.QApplication([])
-game = Game()
+game = GameUI()
 
 sys.exit(app.exec_())

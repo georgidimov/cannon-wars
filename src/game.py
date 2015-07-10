@@ -1,74 +1,80 @@
-from PyQt4 import QtGui
 from src.field import Field
-from src.fieldUI import FieldUI
 from src.cannon import Cannon
-from src.cannonUI import CannonUI
 from src.position import Position
 
 
-class Game(QtGui.QWidget):
+class Game:
     def __init__(self):
         super(Game, self).__init__()
 
-        self.windowW = 1000
-        self.windowH = 768
-        self.window_title = 'Cannon wars'
+        self.window_width = 1000
+        self.window_height = 768
+        self.title = 'Cannon wars'
         self.logo_location = 'images/logo.png'
-
-        self.__init_window()
 
         self.maps = [{}]
         self.current_map = 0
         self.__init_maps()
+        self.field = Field(self.maps[self.current_map]['field_source_file'])
 
-        bg_palette = QtGui.QPalette()
-        bg_image = QtGui.QPixmap(self.maps[self.current_map]['background'])
-        bg_brush = QtGui.QBrush(bg_image)
-        bg_palette.setBrush(QtGui.QPalette.Background, bg_brush)
-        self.setPalette(bg_palette)
-
-        self.field = Field(self.maps[self.current_map]['location'])
-        field_texture = self.maps[self.current_map]['grass']
-        self.fieldUI = FieldUI(self.field, field_texture)
-
+        self.cannons_count = 2
         self.cannons = []
-        self.cannonsUI = []
         self.__init_cannons()
-
-    def __init_window(self):
-        self.resize(self.windowW, self.windowH)
-        self.setWindowTitle(self.window_title)
-        self.setWindowIcon(QtGui.QIcon(self.logo_location))
-        self.show()
 
     def __init_maps(self):
         self.maps[0] = {
-            'location': 'maps/map1',
-            'grass': 'images/grass1.jpg',
+            'field_source_file': 'maps/map1',
+            'field_texture': 'images/grass1.jpg',
             'background': 'images/background_0.png',
             'cannon0': 'images/cannon0_0.png',
-            'cannon1': 'images/cannon0_1.png'
+            'cannon1': 'images/cannon0_1.png',
+            'projectile': 'images/projectile0.png'
         }
 
         self.current_map = 0
 
     def __init_cannons(self):
-        self.cannons.append(Cannon(Position(0, 400), 45, 30))
-        self.cannons.append(Cannon(Position(600, 395), 45, 30))
+        self.cannons.append(Cannon(Position(0, 400), 25, 30))
+        self.cannons.append(Cannon(Position(600, 395), 28, 30))
 
-        cannon_image = self.maps[self.current_map]['cannon0']
-        self.cannonsUI.append(CannonUI(self.cannons[0], cannon_image))
+    def get_window_height(self):
+        return self.window_height
 
-        cannon_image = self.maps[self.current_map]['cannon1']
-        self.cannonsUI.append(CannonUI(self.cannons[1], cannon_image))
+    def get_window_width(self):
+        return self.window_width
 
-    def paintEvent(self, event):
-        painter = QtGui.QPainter()
-        painter.begin(self)
+    def get_title(self):
+        return self.title
 
-        self.fieldUI.draw(painter)
+    def get_logo(self):
+        return self.logo_location
 
-        for cannon in self.cannonsUI:
-            cannon.draw(painter)
+    def get_background_image(self):
+        return self.maps[self.current_map]['background']
 
-        painter.end()
+    def get_field_texture(self):
+        return self.maps[self.current_map]['field_texture']
+
+    def get_field_coordinates(self):
+        return self.field.get_coordinates()
+
+    def get_cannons_count(self):
+        return self.cannons_count
+
+    def get_cannon_texture(self, index):
+        return self.maps[self.current_map]['cannon' + str(index)]
+
+    def get_cannon_width(self, index):
+        return self.cannons[index].get_width()
+
+    def get_cannon_height(self, index):
+        return self.cannons[index].get_height()
+
+    def get_cannon_horizontal_position(self, index):
+        return self.cannons[index].get_horizontal_position()
+
+    def get_cannon_vertical_position(self, index):
+        return self.cannons[index].get_vertical_position()
+
+    def get_cannon_angle(self, index):
+        return self.cannons[index].get_angle()
