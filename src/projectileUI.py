@@ -11,8 +11,6 @@ class ProjectileUI:
     def draw(self, painter, image, trajectory):
         if not self.in_cannon:
             painter.setPen(QtCore.Qt.red)
-
-            painter.drawPoint(50, 50)
             for point in trajectory:
                 painter.drawPoint(point[0], point[1])
-                print(point)
+            self.in_cannon = False
