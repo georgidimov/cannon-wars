@@ -53,13 +53,24 @@ class GameUI(QtGui.QWidget):
         return converted_points
 
     def __convert_trajectory(self, trajectory):
-        for point in trajectory:
-            point[1] = self.game.get_window_height() - point[1]
+        if self.game.get_cannon_turn() == 0:
+            first_point = trajectory[0]
 
+            for point in trajectory:
+                point[1] -= 2 * (point[1] - first_point[1])
+        else:
+            first_point = trajectory[0]
+            for point in trajectory:
+                point[0] -= 2 * (point[0] - first_point[0])
+                point[1] -= 2 * (point[1] - first_point[1])
         return trajectory
 
-    def __convert_angle(self, angle):
-        difference_in_image = 25
+    def __convert_angle(self, angle, index):
+        if index == 0:
+            difference_in_image = 20
+        else:
+            difference_in_image = 60
+
         return angle - difference_in_image
 
     def __draw_field(self, painter):
@@ -77,11 +88,11 @@ class GameUI(QtGui.QWidget):
             width = self.game.get_cannon_width(index)
             height = self.game.get_cannon_height(index)
             angle = self.game.get_cannon_angle(index)
-            angle = self.__convert_angle(angle)
+            angle = self.__convert_angle(angle, index)
             cannon[1].draw(painter, cannon_image, x, y, width, height, angle)
 
             projectile_image = self.game.get_projectile_image(index)
-            trajectory = self.game.get_projectile_trajectory(index)
+            trajectory = self.game.get_projectile_trajectory()
             trajectory = self.__convert_trajectory(trajectory)
             self.projectiles[index].draw(painter, projectile_image, trajectory)
 
@@ -95,6 +106,21 @@ class GameUI(QtGui.QWidget):
         painter.end()
 
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Space:
-            self.projectiles[0].shoot()
+        event_key = event.key()
+
+        if event_key == QtCore.Qt.Key_Space:
+            cannon_index = self.game.get_cannon_turn()
+            self.projectiles[cannon_index].shoot()
+            self.game.shoot()
+        elif event_key == QtCore.Qt.Key_Left:
+            self.game.decrease_cannon_initial_speed()
+        elif event_key == QtCore.Qt.Key_Right:
+            self.game.increase_cannon_initial_speed()
+        elif event_key == QtCore.Qt.Key_Up:
+            self.game.increase_cannon_initial_speed()
+        elif event_key == QtCore.Qt.Key_Down:
+            self.game.decrease_cannon_initial_speed()
+        elif event_key == QtCore.Qt.Key_Escape:
+            self.close()
+
         self.update()
