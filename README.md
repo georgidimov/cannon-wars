@@ -5,3 +5,14 @@ Cannon wars ще бъде remake на добре познатите ни artille
 urwid.
 ![Screenshot]
 (http://prikachi.com/images/55/8226055r.png)
+
+Стартирайте играта с
+```
+python main.py
+```
+
+Тестовете се пускат с
+```
+python -m unittest discover tests/
+```
+
