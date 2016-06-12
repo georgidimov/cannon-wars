@@ -4,7 +4,7 @@ Cannon wars ще бъде remake на добре познатите ни artille
 история. За GUI мисля да използвам QT, а в един по-късен момент и 
 urwid.
 ![Screenshot]
-(http://prikachi.com/images/55/8226055r.png)
+(cannon_wars.png)
 
 Стартирайте играта с
 ```
